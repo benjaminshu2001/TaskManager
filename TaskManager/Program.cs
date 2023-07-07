@@ -1,7 +1,21 @@
-var builder = WebApplication.CreateBuilder(args);
+using TaskManager.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
+
+var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("TaskManagerDbContextConnection") ?? throw new InvalidOperationException("Connection string 'TaskManagerDbContextConnection' not found.");
 // Add services to the container.
+
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<TaskManagerDbContext>(options =>
+{
+    options.UseSqlServer(
+        builder.Configuration["ConnectionStrings:TaskManagerDbContextConnection"]);
+});
+
 
 var app = builder.Build();
 
