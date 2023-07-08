@@ -1,4 +1,6 @@
-﻿namespace TaskManager.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace TaskManager.Models
 {
     public class TaskRepository : ITaskRepository
     {
@@ -8,7 +10,12 @@
         {
             _TaskManagerdbContext = taskManagerdbContext;
         }
-        public IEnumerable<Task> AllTasks { get; } = default!;
-        //public IEnumerable<Task> AllTasks => _TaskManagerdbContext.Tasks.OrderBy(t => t.Title);
+        public IEnumerable<Task> AllTasks => _TaskManagerdbContext.Tasks;
+
+        public void AddTask(Task task)
+        {
+            _TaskManagerdbContext.Tasks.Add(task);
+            _TaskManagerdbContext.SaveChanges();
+        }
     }
 }

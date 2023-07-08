@@ -1,6 +1,7 @@
 using TaskManager.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,11 +12,7 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<TaskManagerDbContext>(options =>
-{
-    options.UseSqlServer(
-        builder.Configuration["ConnectionStrings:TaskManagerDbContextConnection"]);
-});
-
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManagerDbContextConnection")));
 
 var app = builder.Build();
 

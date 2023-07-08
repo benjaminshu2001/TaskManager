@@ -8,5 +8,6 @@
         public string Category { get; set; }
         public DateTime DueDate { get; set; }
         public bool isCompleted { get; set; }
+        public string Status { get; set; }
     }
 }

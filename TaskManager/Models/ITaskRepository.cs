@@ -3,7 +3,7 @@
     public interface ITaskRepository
     {
         IEnumerable<Task> AllTasks { get; }
-
+        void AddTask(Task task);
     }
 
 
