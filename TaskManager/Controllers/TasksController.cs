@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -87,7 +88,8 @@ namespace TaskManager.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Category,DueDate,isCompleted,Status")] Models.Task task)
+        [Authorize]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Category,DueDate,isCompleted, Status")] Models.Task task)
         {
             if (id != task.Id)
             {

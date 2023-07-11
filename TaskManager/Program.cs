@@ -2,49 +2,42 @@ using TaskManager.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-
+using TaskManager.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("TaskManagerDbContextConnection") ?? throw new InvalidOperationException("Connection string 'TaskManagerDbContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("TaskManagerDbContext") ?? throw new InvalidOperationException("Connection string 'TaskManagerDbContextConnection' not found.");
 // Add services to the container.
 
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<TaskManagerDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManagerDbContextConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManagerDbContext") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-        .AddEntityFrameworkStores<TaskManagerDbContext>()
-        .AddDefaultTokenProviders();
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<TaskManagerDbContext>();
 
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.Password.RequireDigit = true;
-    options.Password.RequiredLength = 8;
-    // Configure other password requirements as needed
-});
+builder.Services.AddControllersWithViews();
+
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-/*if (!app.Environment.IsDevelopment())
+
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-}*/
-if(app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
 }
+
+app.MapRazorPages();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-
-
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 

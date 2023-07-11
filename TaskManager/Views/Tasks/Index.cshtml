@@ -52,6 +52,9 @@
                 @Html.DisplayFor(modelItem => item.isCompleted)
             </td>
             <td>
+                    @{
+                        item.UpdateStatus();
+                    }
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
