@@ -56,7 +56,7 @@ namespace TaskManager.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Category,DueDate,isCompleted,Status")] Models.Task task)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,DueDate,isCompleted,Status")] Models.Task task)
         {
             if (ModelState.IsValid)
             {
