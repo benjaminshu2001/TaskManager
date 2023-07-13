@@ -29,5 +29,19 @@ namespace TaskManager.Controllers.Api
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTask(Models.Task task)
+        {
+            try
+            {
+                var createdTask = await _taskRepository.CreateTask(task);
+                return CreatedAtRoute(task.Title, new { id = createdTask.Id }, createdTask);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

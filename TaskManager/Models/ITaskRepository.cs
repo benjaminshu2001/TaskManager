@@ -1,9 +1,11 @@
-﻿namespace TaskManager.Models
+﻿using System.Threading.Tasks;
+
+namespace TaskManager.Models
 {
     public interface ITaskRepository
     {
         public Task<IEnumerable<Task>> GetTasks();
-        void AddTask(Task task);
+        public Task<Task> CreateTask(Task task);
     }
 
 

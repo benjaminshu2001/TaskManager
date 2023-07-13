@@ -21,20 +21,37 @@ namespace TaskManager.Models
             {
                 //DynamicParameters parameters = new DynamicParameters();
                 //parameters.Add("Id");
-                //parameters.Add("Title");
-                //parameters.Add("Description");
-                //parameters.Add("DueDate");
-                //parameters.Add("isCompleted");
-                //parameters.Add("Status");
+
 
                 var tasks = await connection.QueryAsync<Models.Task>("TaskManager.Tasks_GetTasks", commandType: CommandType.StoredProcedure);
                 return tasks.ToList();
             }
         }
-        public void AddTask(Task task)
+        public async Task<Task> CreateTask(Task task)
         {
-            _TaskManagerdbContext.Tasks.Add(task);
-            _TaskManagerdbContext.SaveChanges();
+            //_TaskManagerdbContext.Tasks.Add(task);
+            //_TaskManagerdbContext.SaveChanges();
+            using (var connection = _context.CreateConnection())
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("Title", task.Title);
+                parameters.Add("Description", task.Description);
+                parameters.Add("DueDate", task.DueDate);
+                parameters.Add("isCompleted", task.isCompleted);
+                parameters.Add("Status", task.Status);
+
+                var newTaskId = await connection.ExecuteAsync("TaskManager.Tasks_CreateTask", parameters, commandType: CommandType.StoredProcedure);
+                var createdTask = new Task
+                {
+                    Id = newTaskId,
+                    Title = task.Title,
+                    Description = task.Description,
+                    DueDate = task.DueDate,
+                    Status = task.Status,
+                    isCompleted = task.isCompleted
+                };
+                return createdTask;
+            }
         }
     }
 }
