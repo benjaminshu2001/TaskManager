@@ -13,18 +13,25 @@ namespace TaskManager.Controllers
     public class TasksController : Controller
     {
         private readonly TaskManagerDbContext _context;
+        
+        //changing structure
+        private readonly ITaskRepository _taskRepository;
 
-        public TasksController(TaskManagerDbContext context)
+        public TasksController(ITaskRepository TaskRepository, TaskManagerDbContext context)
         {
             _context = context;
+            _taskRepository = TaskRepository;
         }
 
         // GET: Tasks
         public async Task<IActionResult> Index()
         {
-            return _context.Tasks != null ?
-                        View(await _context.Tasks.ToListAsync()) :
-                        Problem("Entity set 'TaskManagerDbContext.Tasks'  is null.");
+            //return _context.Tasks != null ?
+            //            View(await _context.Tasks.ToListAsync()) :
+            //            Problem("Entity set 'TaskManagerDbContext.Tasks'  is null.");
+            var tasks = await _taskRepository.GetTasks();
+
+            return View(tasks);
         }
 
         // GET: Tasks/Details/5

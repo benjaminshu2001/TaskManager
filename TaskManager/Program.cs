@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("TaskManagerDbContext") ?? throw new InvalidOperationException("Connection string 'TaskManagerDbContextConnection' not found.");
 // Add services to the container.
 
+//added dapper context 7/12/2023
+builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
 builder.Services.AddDbContext<TaskManagerDbContext>(options =>

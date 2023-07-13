@@ -2,7 +2,7 @@
 {
     public interface ITaskRepository
     {
-        IEnumerable<Task> AllTasks { get; }
+        public Task<IEnumerable<Task>> GetTasks();
         void AddTask(Task task);
     }
 
