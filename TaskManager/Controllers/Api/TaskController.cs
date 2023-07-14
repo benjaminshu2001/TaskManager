@@ -80,5 +80,24 @@ namespace TaskManager.Controllers.Api
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask(int id)
+        {
+            try
+            {
+                var dbTask = await _taskRepository.GetTaskById(id);
+                if(dbTask == null)
+                {
+                    return NotFound();
+                }
+                await _taskRepository.DeleteTask(id);
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

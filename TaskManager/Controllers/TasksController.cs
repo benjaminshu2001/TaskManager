@@ -42,8 +42,8 @@ namespace TaskManager.Controllers
                 return NotFound();
             }
 
-            var task = await _context.Tasks
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var task = await _taskRepository.GetTaskById((int)id);
+            //var task = await _context.Tasks.FirstOrDefaultAsync(m => m.Id == id);
             if (task == null)
             {
                 return NotFound();
@@ -128,13 +128,13 @@ namespace TaskManager.Controllers
         // GET: Tasks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Tasks == null)
-            {
-                return NotFound();
-            }
+            //if (id == null || _task.Tasks == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var task = await _context.Tasks
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var task = await _taskRepository.GetTaskById((int)id);
+            //var task = await _context.Tasks.FirstOrDefaultAsync(m => m.Id == id);
             if (task == null)
             {
                 return NotFound();
@@ -148,17 +148,15 @@ namespace TaskManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Tasks == null)
+            if (_taskRepository.GetTaskById(id) == null)
             {
                 return Problem("Entity set 'TaskManagerDbContext.Tasks'  is null.");
             }
-            var task = await _context.Tasks.FindAsync(id);
+            var task = await _taskRepository.GetTaskById(id);
             if (task != null)
             {
-                _context.Tasks.Remove(task);
+                await _taskRepository.DeleteTask(id);
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

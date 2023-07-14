@@ -8,7 +8,7 @@ namespace TaskManager.Models
         public Task<Models.Task> GetTaskById(int taskId);
         public Task<Task> CreateTask(Task task);
         public System.Threading.Tasks.Task UpdateTask(int id, Models.Task task);
-        //public System.Threading.Tasks.Task DeleteTask(Models.Task task);
+        public System.Threading.Tasks.Task DeleteTask(int id);
     }
 
 

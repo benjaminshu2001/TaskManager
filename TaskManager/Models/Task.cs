@@ -14,9 +14,9 @@ namespace TaskManager.Models
         public bool isCompleted { get; set; }
         public string Status { get; set; }
 
-        public void UpdateStatus()
-        {
-            Status = isCompleted ? "Completed" : "In progress";
-        }
+        //public void UpdateStatus()
+        //{
+        //    Status = isCompleted ? "Completed" : "In progress";
+        //}
     }
 }

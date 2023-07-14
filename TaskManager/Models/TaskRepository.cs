@@ -81,9 +81,16 @@ namespace TaskManager.Models
             }
                         
         }
-        //public async System.Threading.Tasks.Task DeleteTask(Task task)
-        //{
+        public async System.Threading.Tasks.Task DeleteTask(int id)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("Id", id);
 
-        //}
+            using (var connection = _context.CreateConnection())
+            {
+                await connection.ExecuteAsync("TaskManager.Tasks_DeleteTask", parameters, commandType: CommandType.StoredProcedure);
+
+            }
+        }
     }
 }
