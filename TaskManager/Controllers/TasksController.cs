@@ -94,7 +94,7 @@ namespace TaskManager.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Title,Description,DueDate,isCompleted, Status")] Models.Task task)
         {
 /*            if (id != task.Id)

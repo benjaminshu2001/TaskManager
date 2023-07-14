@@ -4,7 +4,7 @@ using TaskManager.Models;
 
 namespace TaskManager.Controllers.Api
 {
-    [Microsoft.AspNetCore.Mvc.Route("task/index")]
+    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
     [ApiController]
     public class TaskController : ControllerBase
     {
