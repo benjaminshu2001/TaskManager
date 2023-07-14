@@ -4,10 +4,11 @@ using TaskManager.Models;
 
 namespace TaskManager.Controllers.Api
 {
-    [Microsoft.AspNetCore.Mvc.Route("tasks/index")]
+    [Microsoft.AspNetCore.Mvc.Route("task/index")]
     [ApiController]
     public class TaskController : ControllerBase
     {
+
         private readonly ITaskRepository _taskRepository;
 
         public TaskController(ITaskRepository taskRepository)
@@ -29,7 +30,23 @@ namespace TaskManager.Controllers.Api
                 return BadRequest(ex.Message);
             }
         }
-
+        [HttpGet("{id}", Name = "TaskById")]
+        public async Task<IActionResult> GetTaskById(int id)
+        {
+            try
+            {
+                var task = await _taskRepository.GetTaskById(id);
+                if(task == null)
+                {
+                    return NotFound();
+                }
+                return Ok(task);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
         [HttpPost]
         public async Task<IActionResult> CreateTask(Models.Task task)
         {
@@ -39,6 +56,26 @@ namespace TaskManager.Controllers.Api
                 return CreatedAtRoute(task.Title, new { id = createdTask.Id }, createdTask);
             }
             catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTask(int id, Models.Task task)
+        {
+            try
+            {
+                var dbTask = await _taskRepository.GetTaskById(id);
+                if(dbTask == null)
+                {
+                    return NotFound();
+                }
+
+                await _taskRepository.UpdateTask(id, task);
+                return NoContent();
+            }
+            catch(Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
