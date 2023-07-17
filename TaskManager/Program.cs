@@ -8,9 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("TaskManagerDbContext") ?? throw new InvalidOperationException("Connection string 'TaskManagerDbContextConnection' not found.");
 // Add services to the container.
 
-//added dapper context 7/12/2023
+//7/12/2023 - added dapper context 
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+
+//7/14/2023 - adding authentication scheme 
+builder.Services.AddAuthentication()
+    .AddCookie();
 
 builder.Services.AddDbContext<TaskManagerDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManagerDbContext") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
@@ -39,8 +43,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

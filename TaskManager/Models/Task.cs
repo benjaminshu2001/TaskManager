@@ -13,7 +13,11 @@ namespace TaskManager.Models
         [Display(Name = "Is Completed")]
         public bool isCompleted { get; set; }
         public string Status { get; set; }
-
+        [Display(Name = "Created Date")]
+        public DateTime CreatedDate {  get; set; }
+        [Display(Name = "Updated Date")]
+        public DateTime UpdatedDate { get; set; }
+        public string CreatedBy { get; set; }
         //public void UpdateStatus()
         //{
         //    Status = isCompleted ? "Completed" : "In progress";

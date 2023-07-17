@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace TaskManager.Models
 {
@@ -11,10 +13,13 @@ namespace TaskManager.Models
     {
         private readonly TaskManagerDbContext _TaskManagerdbContext;
         private readonly DapperContext _context;
-        public TaskRepository(TaskManagerDbContext taskManagerdbContext, DapperContext DapperContext)
+        private IHttpContextAccessor _httpContextAccessor;
+
+        public TaskRepository(TaskManagerDbContext taskManagerdbContext, DapperContext DapperContext, IHttpContextAccessor httpContextAccessor)
         {
             _TaskManagerdbContext = taskManagerdbContext;
             _context = DapperContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<Models.Task>> GetTasks()
@@ -44,14 +49,15 @@ namespace TaskManager.Models
             using (var connection = _context.CreateConnection())
             {
                 var parameters = new DynamicParameters();
+                var user = _httpContextAccessor.HttpContext?.User;
                 parameters.Add("Title", task.Title);
                 parameters.Add("Description", task.Description);
                 parameters.Add("DueDate", task.DueDate);
                 parameters.Add("isCompleted", task.isCompleted);
                 parameters.Add("Status", task.Status);
-
+                parameters.Add("CreatedBy", "benjamin_shu");
                 var newTaskId = await connection.QuerySingleAsync<int>("TaskManager.Tasks_CreateTask", parameters, commandType: CommandType.StoredProcedure);
-                
+
                 var createdTask = new Task
                 {
                     Id = newTaskId,
@@ -59,7 +65,8 @@ namespace TaskManager.Models
                     Description = task.Description,
                     DueDate = task.DueDate,
                     Status = task.Status,
-                    isCompleted = task.isCompleted
+                    isCompleted = task.isCompleted,
+                    CreatedBy = user.ToString()
                 };
 
                 return createdTask;
