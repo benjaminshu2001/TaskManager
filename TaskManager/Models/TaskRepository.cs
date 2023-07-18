@@ -56,11 +56,14 @@ namespace TaskManager.Models
                 {
                     // Get the user ID from the authenticated user's claims
                     parameters.Add("CreatedBy", userId); // Use the user ID as the CreatedBy value
+                    parameters.Add("UpdatedBy", userId);
                 }
                 else
                 {
                     // Handle the case where the user is not authenticated (if needed)
                     parameters.Add("CreatedBy", "Anonymous");
+                    parameters.Add("UpdatedBy", "Anonymous");
+
                 }
 
                 parameters.Add("Title", task.Title);
@@ -78,7 +81,8 @@ namespace TaskManager.Models
                     DueDate = task.DueDate,
                     Status = task.Status,
                     isCompleted = task.isCompleted,
-                    CreatedBy = userId ?? "Anonymous"
+                    CreatedBy = userId ?? "Anonymous",
+                    UpdatedBy = userId ?? "Anonymous"
                 };
 
                 return createdTask;
@@ -93,6 +97,19 @@ namespace TaskManager.Models
             parameters.Add("DueDate", task.DueDate);
             parameters.Add("isCompleted", task.isCompleted);
             parameters.Add("Status", task.Status);
+
+            var user = _httpContextAccessor.HttpContext?.User;
+            var userId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value; // Retrieve the user ID
+
+            if (user != null && user.Identity.IsAuthenticated)
+            {
+                parameters.Add("UpdatedBy", userId); // Use the user ID as the UpdatedBy value
+            }
+            else
+            {
+                // Handle the case where the user is not authenticated (if needed)
+                parameters.Add("UpdatedBy", "Anonymous");
+            }
 
             using (var connection = _context.CreateConnection())
             {
