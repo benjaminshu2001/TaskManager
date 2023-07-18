@@ -50,12 +50,24 @@ namespace TaskManager.Models
             {
                 var parameters = new DynamicParameters();
                 var user = _httpContextAccessor.HttpContext?.User;
+                var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (user != null && user.Identity.IsAuthenticated)
+                {
+                    // Get the user ID from the authenticated user's claims
+                    parameters.Add("CreatedBy", userId); // Use the user ID as the CreatedBy value
+                }
+                else
+                {
+                    // Handle the case where the user is not authenticated (if needed)
+                    parameters.Add("CreatedBy", "Anonymous");
+                }
+
                 parameters.Add("Title", task.Title);
                 parameters.Add("Description", task.Description);
                 parameters.Add("DueDate", task.DueDate);
                 parameters.Add("isCompleted", task.isCompleted);
                 parameters.Add("Status", task.Status);
-                parameters.Add("CreatedBy", "benjamin_shu");
                 var newTaskId = await connection.QuerySingleAsync<int>("TaskManager.Tasks_CreateTask", parameters, commandType: CommandType.StoredProcedure);
 
                 var createdTask = new Task
@@ -66,7 +78,7 @@ namespace TaskManager.Models
                     DueDate = task.DueDate,
                     Status = task.Status,
                     isCompleted = task.isCompleted,
-                    CreatedBy = user.ToString()
+                    CreatedBy = userId ?? "Anonymous"
                 };
 
                 return createdTask;

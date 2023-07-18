@@ -13,19 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.ActionLink("Title", "Index", new {sortOrder = ViewBag.TitleSortParm })
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DueDate)
+                @Html.ActionLink("Due Date", "Index", new {sortOrder = ViewBag.DateSortParm })
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.isCompleted)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.ActionLink("Status", "Index", new {sortOrder = ViewBag.StatusSortParm })
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedDate)

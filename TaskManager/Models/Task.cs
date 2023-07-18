@@ -17,6 +17,7 @@ namespace TaskManager.Models
         public DateTime CreatedDate {  get; set; }
         [Display(Name = "Updated Date")]
         public DateTime UpdatedDate { get; set; }
+        [Display(Name = "Created By")]
         public string CreatedBy { get; set; }
         //public void UpdateStatus()
         //{

@@ -25,13 +25,37 @@ namespace TaskManager.Controllers
         }
 
         // GET: Tasks
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            //return _context.Tasks != null ?
-            //            View(await _context.Tasks.ToListAsync()) :
-            //            Problem("Entity set 'TaskManagerDbContext.Tasks'  is null.");
+            ViewBag.TitleSortParm = sortOrder == "Title" ? "title_desc" : "Title";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
             var tasks = await _taskRepository.GetTasks();
-
+            
+            switch(sortOrder)
+            {
+                case "Title":
+                    tasks = tasks.OrderBy(tasks => tasks.Title);
+                    break;
+                case "title_desc":
+                    tasks = tasks.OrderByDescending(tasks => tasks.Title);
+                    break;
+                case "Date":
+                    tasks = tasks.OrderBy(tasks => tasks.DueDate);
+                    break;
+                case "date_desc":
+                    tasks = tasks.OrderByDescending(tasks => tasks.DueDate);
+                    break;
+                case "Status":
+                    tasks = tasks.OrderBy(tasks => tasks.Status);
+                    break;
+                case "status_desc":
+                    tasks = tasks.OrderByDescending(tasks => tasks.Status);
+                    break;
+                default:
+                    tasks = tasks.OrderBy(tasks => tasks.Id);
+                    break;
+            }
             return View(tasks);
         }
 
