@@ -25,13 +25,18 @@ namespace TaskManager.Controllers
         }
 
         // GET: Tasks
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewBag.TitleSortParm = sortOrder == "Title" ? "title_desc" : "Title";
             ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
             var tasks = await _taskRepository.GetTasks();
             
+            if(!String.IsNullOrEmpty(searchString))
+            {
+                tasks = tasks.Where(tasks => tasks.Title.ToLower().Contains(searchString.ToLower()));
+            }
+
             switch(sortOrder)
             {
                 case "Title":
