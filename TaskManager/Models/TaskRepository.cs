@@ -99,11 +99,11 @@ namespace TaskManager.Models
             parameters.Add("Status", task.Status);
 
             var user = _httpContextAccessor.HttpContext?.User;
-            var userId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value; // Retrieve the user ID
+            var userName = user?.FindFirst(ClaimTypes.Name)?.Value; // Retrieve the user name
 
             if (user != null && user.Identity.IsAuthenticated)
             {
-                parameters.Add("UpdatedBy", userId); // Use the user ID as the UpdatedBy value
+                parameters.Add("UpdatedBy", userName); // Use the user ID as the UpdatedBy value
             }
             else
             {
