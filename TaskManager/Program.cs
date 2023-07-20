@@ -19,12 +19,15 @@ builder.Services.AddAuthentication()
 builder.Services.AddDbContext<TaskManagerDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManagerDbContext") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<TaskManagerUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<TaskManagerDbContext>();
+
+//builder.Services.AddIdentity<TaskManagerUser, IdentityRole>()
+//    .AddEntityFrameworkStores<TaskManagerDbContext>();
 
 builder.Services.AddControllersWithViews();
 
-
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 namespace TaskManager.Models
 {
-    public class TaskManagerDbContext : IdentityDbContext
+    public class TaskManagerDbContext : IdentityDbContext<TaskManagerUser>
     {
         public TaskManagerDbContext(DbContextOptions<TaskManagerDbContext> options) : base(options) { }
 
