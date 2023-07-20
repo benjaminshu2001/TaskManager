@@ -7,6 +7,7 @@ namespace TaskManager.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+
         [Display(Name = "Due Date"), DataType(DataType.Date)]
         public DateTime DueDate { get; set; }
         [Display(Name = "Is Completed")]

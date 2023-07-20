@@ -27,7 +27,6 @@ namespace TaskManager.Models
             using (var connection = _context.CreateConnection())
             {
                 var tasks = await connection.QueryAsync<Models.Task>("TaskManager.Tasks_GetTasks", commandType: CommandType.StoredProcedure);
-                
                 return tasks.ToList();
             }
         }
@@ -36,7 +35,6 @@ namespace TaskManager.Models
             using(var connection = _context.CreateConnection())
             {
                 var parameters = new DynamicParameters();
-                
                 parameters.Add("Id", taskId);
                 var matchingTask = await connection.QuerySingleOrDefaultAsync<Models.Task>("TaskManager.Tasks_GetTaskById", parameters, commandType: CommandType.StoredProcedure);
                 
@@ -53,15 +51,12 @@ namespace TaskManager.Models
                 var parameters = new DynamicParameters();
                 var user = _httpContextAccessor.HttpContext?.User;
                 var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var userName = user.FindFirst(ClaimTypes.Name)?.Value;
 
                 if (user != null && user.Identity.IsAuthenticated)
                 {
                     // Get the user ID from the authenticated user's claims
-                    //parameters.Add("CreatedBy", userId); // Use the user ID as the CreatedBy value
-                    //parameters.Add("UpdatedBy", userId);
-                    parameters.Add("CreatedBy", userName); //see if this takes the userName from db
-                    parameters.Add("UpdatedBy", userName);
+                    parameters.Add("CreatedBy", userId); // Use the user ID as the CreatedBy value
+                    parameters.Add("UpdatedBy", userId);
                 }
                 else
                 {
@@ -76,8 +71,8 @@ namespace TaskManager.Models
                 parameters.Add("DueDate", task.DueDate);
                 parameters.Add("isCompleted", task.isCompleted);
                 parameters.Add("Status", task.Status);
-                
                 var newTaskId = await connection.QuerySingleAsync<int>("TaskManager.Tasks_CreateTask", parameters, commandType: CommandType.StoredProcedure);
+
                 var createdTask = new Task
                 {
                     Id = newTaskId,
@@ -93,8 +88,6 @@ namespace TaskManager.Models
                 return createdTask;
             }
         }
-        
-        //Update task and 'Updated By' column
         public async System.Threading.Tasks.Task UpdateTask(int id, Task task)
         {
             var parameters = new DynamicParameters();
@@ -122,10 +115,8 @@ namespace TaskManager.Models
             {
                  await connection.ExecuteAsync("TaskManager.Tasks_UpdateTask", parameters, commandType: CommandType.StoredProcedure);
             }
-            
                         
         }
-        //Deleting a task
         public async System.Threading.Tasks.Task DeleteTask(int id)
         {
             var parameters = new DynamicParameters();
