@@ -26,7 +26,7 @@ namespace TaskManager.Models
         {
             using (var connection = _context.CreateConnection())
             {
-                var tasks = await connection.QueryAsync<Models.Task>("TaskManager.Tasks_GetTasks", commandType: CommandType.StoredProcedure);
+                var tasks = await connection.QueryAsync<Models.Task>("TaskManager.Tasks_Get", commandType: CommandType.StoredProcedure);
                 return tasks.ToList();
             }
         }
@@ -50,13 +50,13 @@ namespace TaskManager.Models
             {
                 var parameters = new DynamicParameters();
                 var user = _httpContextAccessor.HttpContext?.User;
-                var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userName = user.FindFirst(ClaimTypes.Name)?.Value;
 
                 if (user != null && user.Identity.IsAuthenticated)
                 {
                     // Get the user ID from the authenticated user's claims
-                    parameters.Add("CreatedBy", userId); // Use the user ID as the CreatedBy value
-                    parameters.Add("UpdatedBy", userId);
+                    parameters.Add("CreatedBy", userName); // Use the user ID as the CreatedBy value
+                    parameters.Add("UpdatedBy", userName);
                 }
                 else
                 {
@@ -71,7 +71,8 @@ namespace TaskManager.Models
                 parameters.Add("DueDate", task.DueDate);
                 parameters.Add("isCompleted", task.isCompleted);
                 parameters.Add("Status", task.Status);
-                var newTaskId = await connection.QuerySingleAsync<int>("TaskManager.Tasks_CreateTask", parameters, commandType: CommandType.StoredProcedure);
+
+                var newTaskId = await connection.QuerySingleAsync<int>("TaskManager.Tasks_Create", parameters, commandType: CommandType.StoredProcedure);
 
                 var createdTask = new Task
                 {
@@ -81,8 +82,8 @@ namespace TaskManager.Models
                     DueDate = task.DueDate,
                     Status = task.Status,
                     isCompleted = task.isCompleted,
-                    CreatedBy = userId ?? "Anonymous",
-                    UpdatedBy = userId ?? "Anonymous"
+                    CreatedBy = userName ?? "Anonymous",
+                    UpdatedBy = userName ?? "Anonymous"
                 };
 
                 return createdTask;
@@ -113,7 +114,7 @@ namespace TaskManager.Models
 
             using (var connection = _context.CreateConnection())
             {
-                 await connection.ExecuteAsync("TaskManager.Tasks_UpdateTask", parameters, commandType: CommandType.StoredProcedure);
+                 await connection.ExecuteAsync("TaskManager.Tasks_Update", parameters, commandType: CommandType.StoredProcedure);
             }
                         
         }
@@ -124,7 +125,7 @@ namespace TaskManager.Models
 
             using (var connection = _context.CreateConnection())
             {
-                await connection.ExecuteAsync("TaskManager.Tasks_DeleteTask", parameters, commandType: CommandType.StoredProcedure);
+                await connection.ExecuteAsync("TaskManager.Tasks_Delete", parameters, commandType: CommandType.StoredProcedure);
 
             }
         }
