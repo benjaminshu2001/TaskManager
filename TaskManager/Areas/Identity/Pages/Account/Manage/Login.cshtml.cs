@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using TaskManager.Models;
 
-namespace TaskManager.Areas.Identity.Pages.Account
+namespace TaskManager.Areas.Identity.Pages.Account.Manage
 {
     public class LoginModel : PageModel
     {
@@ -120,7 +120,7 @@ namespace TaskManager.Areas.Identity.Pages.Account
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, Input.RememberMe });
                 }
                 if (result.IsLockedOut)
                 {
