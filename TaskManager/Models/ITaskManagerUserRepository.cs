@@ -3,7 +3,7 @@ namespace TaskManager.Models
 {
     public interface ITaskManagerUserRepository
     {
-        Task<IEnumerable<TaskManagerUser>> GetUsers();
+        public Task<IEnumerable<TaskManagerUser>> GetUsers();
 
     }
 }

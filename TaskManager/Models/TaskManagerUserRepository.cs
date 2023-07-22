@@ -8,14 +8,12 @@ namespace TaskManager.Models
     {
         private readonly TaskManagerDbContext _taskManagerDbContext;
         private readonly DapperContext _dapperContext;
-        private IHttpContextAccessor _httpContextAccessor;
 
         //dependency injection
-        public TaskManagerUserRepository(TaskManagerDbContext TaskManagerDbContext, DapperContext DapperContext, HttpContextAccessor httpContextAccessor)
+        public TaskManagerUserRepository(TaskManagerDbContext TaskManagerDbContext, DapperContext DapperContext)
         {
             _taskManagerDbContext = TaskManagerDbContext;
             _dapperContext = DapperContext;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<TaskManagerUser>> GetUsers()
@@ -26,8 +24,8 @@ namespace TaskManager.Models
                 return users.ToList();
             }
         }
-            
-            
-            
+
+
+
     }
 }

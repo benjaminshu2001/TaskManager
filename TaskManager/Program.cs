@@ -10,7 +10,8 @@ var connectionString = builder.Configuration.GetConnectionString("TaskManagerDbC
 //7/12/2023 - added dapper context 
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-
+builder.Services.AddScoped<ITaskManagerUserRepository, TaskManagerUserRepository>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 //7/14/2023 - adding authentication scheme 
 builder.Services.AddAuthentication()
     .AddCookie();

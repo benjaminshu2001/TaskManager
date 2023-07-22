@@ -6,7 +6,7 @@ namespace TaskManager.Models
 {
     public class TaskManagerUser : IdentityUser<Guid>
     {
-        public int Id { get; set; }
+        public int UniqueId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Badge_ID { get; set; }
