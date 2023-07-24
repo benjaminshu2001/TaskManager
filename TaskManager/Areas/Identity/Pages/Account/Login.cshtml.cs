@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using TaskManager.Models;
 
-namespace TaskManager.Areas.Identity.Pages.Account.Manage
+namespace TaskManager.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {

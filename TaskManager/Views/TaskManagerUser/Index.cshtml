@@ -7,7 +7,7 @@
 <h1>User Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New (wip)</a>
 </p>
 
 @using (Html.BeginForm())
@@ -73,6 +73,9 @@
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.DomainName)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Created_By)
             </td>
             <td>
@@ -85,9 +88,9 @@
                 @Html.DisplayFor(modelItem => item.Updated_Date)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit (wip)</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details (wip)</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete (wip)</a>
             </td>
         </tr>
 }
