@@ -11,7 +11,6 @@ using TaskManager.Models;
 
 namespace TaskManager.Controllers
 {
-    [Authorize]
     public class TasksController : Controller
     {
         private readonly TaskManagerDbContext _context;
