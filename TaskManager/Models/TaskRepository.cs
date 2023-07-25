@@ -54,10 +54,11 @@ namespace TaskManager.Models
             using (var connection = _context.CreateConnection())
             {
                 var parameters = new DynamicParameters();
-                
+
                 //commented stuff works for Asp.Net.Identity users, don't rec in the future
                 //var user = _httpContextAccessor.HttpContext?.User;
                 //var userName = user.FindFirst(ClaimTypes.Name)?.Value;
+                //7/25/2023 changed HttpContextAccessor to PrincipalContext
 
                 PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
                 UserPrincipal user = UserPrincipal.FindByIdentity(ctx, "bshu");
@@ -111,17 +112,22 @@ namespace TaskManager.Models
             parameters.Add("isCompleted", task.isCompleted);
             parameters.Add("Status", task.Status);
 
-            var user = _httpContextAccessor.HttpContext?.User;
-            var userName = user?.FindFirst(ClaimTypes.Name)?.Value; // Retrieve the user name
+            //7/25/2023 changed HttpContextAccessor to PrincipalContext
+            PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
+            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, "bshu");
+            string samAccountName = "";
 
-            if (user != null && user.Identity.IsAuthenticated)
+            if (user != null)
             {
-                parameters.Add("UpdatedBy", userName); // Use the user ID as the UpdatedBy value
+                samAccountName = user.SamAccountName;
+                // Get the user ID from the authenticated user's claims
+                parameters.Add("UpdatedBy", samAccountName);
             }
             else
             {
                 // Handle the case where the user is not authenticated (if needed)
                 parameters.Add("UpdatedBy", "Anonymous");
+
             }
 
             using (var connection = _context.CreateConnection())
