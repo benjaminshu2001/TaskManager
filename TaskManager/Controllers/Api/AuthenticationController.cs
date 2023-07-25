@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.Models;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
-
 namespace TaskManager.Controllers.Api
 {
     [Route("api/[controller]")]
@@ -28,5 +27,6 @@ namespace TaskManager.Controllers.Api
 
             return Ok(new { ok = true });
         }
+
     }
 }
