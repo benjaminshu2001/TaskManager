@@ -55,4 +55,19 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            // Add event listener to the checkbox
+            $('#isCompleted').change(function () {
+                if ($(this).is(':checked')) {
+                    // If the checkbox is checked, set the status to "Completed"
+                    $('#Status').val('Completed');
+                } else {
+                    // If the checkbox is unchecked, reset the status to "Select status"
+                    $('#Status').val('Select status');
+                }
+            });
+        });
+    </script>
 }
