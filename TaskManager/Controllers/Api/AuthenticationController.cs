@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.Models;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
@@ -27,6 +29,7 @@ namespace TaskManager.Controllers.Api
 
             return Ok(new { ok = true });
         }
+
 
     }
 }
