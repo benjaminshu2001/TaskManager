@@ -6,6 +6,11 @@ using Microsoft.Data.SqlClient;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Azure.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.DirectoryServices.AccountManagement;
+using System.Net.Mime;
 
 namespace TaskManager.Models
 {
@@ -49,14 +54,18 @@ namespace TaskManager.Models
             using (var connection = _context.CreateConnection())
             {
                 var parameters = new DynamicParameters();
-                var user = _httpContextAccessor.HttpContext?.User;
-                var userName = user.FindFirst(ClaimTypes.Name)?.Value;
+                //var user = _httpContextAccessor.HttpContext?.User;
+                //var userName = user.FindFirst(ClaimTypes.Name)?.Value;
+                PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
 
-                if (user != null && user.Identity.IsAuthenticated)
+                UserPrincipal user = UserPrincipal.FindByIdentity(ctx, "bshu");
+                string samAccountName = "";
+                if (user != null)
                 {
+                    samAccountName = user.SamAccountName;
                     // Get the user ID from the authenticated user's claims
-                    parameters.Add("CreatedBy", userName); // Use the user ID as the CreatedBy value
-                    parameters.Add("UpdatedBy", userName);
+                    parameters.Add("CreatedBy", samAccountName); // Use the user ID as the CreatedBy value
+                    parameters.Add("UpdatedBy", samAccountName);
                 }
                 else
                 {
@@ -82,8 +91,8 @@ namespace TaskManager.Models
                     DueDate = task.DueDate,
                     Status = task.Status,
                     isCompleted = task.isCompleted,
-                    CreatedBy = userName ?? "Anonymous",
-                    UpdatedBy = userName ?? "Anonymous"
+                    CreatedBy = samAccountName ?? "Anonymous",
+                    UpdatedBy = samAccountName ?? "Anonymous"
                 };
 
                 return createdTask;

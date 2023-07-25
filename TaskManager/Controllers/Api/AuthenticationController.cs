@@ -21,7 +21,7 @@ namespace TaskManager.Controllers.Api
         public async Task<IActionResult> Login([FromBody] UserModel u)
         {
             var isAuthenticated = await _userRepository.IsAuthenticated(u.DomainName, u.UserName, u.Password);
-            
+
             if (!isAuthenticated)
             {
                 return Ok(new { ok = false });
