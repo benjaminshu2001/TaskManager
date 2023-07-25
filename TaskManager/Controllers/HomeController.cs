@@ -5,8 +5,7 @@ using TaskManager.Models;
 
 namespace TaskManager.Controllers
 {
-    //7/24/2023 added forced login on startup
-    [Authorize]
+
     public class HomeController : Controller
     {
         //private readonly ILogger<HomeController> _logger;
@@ -16,12 +15,18 @@ namespace TaskManager.Controllers
         //    _logger = logger;
         //}
 
+        //7/24/2023 added forced login on startup
+        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+        public IActionResult Main()
         {
             return View();
         }
