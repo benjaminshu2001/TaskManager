@@ -54,12 +54,15 @@ namespace TaskManager.Models
             using (var connection = _context.CreateConnection())
             {
                 var parameters = new DynamicParameters();
+                
+                //commented stuff works for Asp.Net.Identity users, don't rec in the future
                 //var user = _httpContextAccessor.HttpContext?.User;
                 //var userName = user.FindFirst(ClaimTypes.Name)?.Value;
-                PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
 
+                PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
                 UserPrincipal user = UserPrincipal.FindByIdentity(ctx, "bshu");
                 string samAccountName = "";
+
                 if (user != null)
                 {
                     samAccountName = user.SamAccountName;
